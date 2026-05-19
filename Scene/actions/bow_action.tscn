@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dk3sdx6fl8o0r"]
+
+[ext_resource type="Script" uid="uid://cjcjd0vwegi0j" path="res://Scene/actions/bow_action.gd" id="1_etljp"]
+
+[node name="BowAction" type="Node" unique_id=762374798]
+script = ExtResource("1_etljp")
+metadata/_custom_type_script = "uid://ln7vx4x445c3"

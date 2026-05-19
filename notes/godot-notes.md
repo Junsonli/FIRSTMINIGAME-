@@ -25,7 +25,7 @@
 | 角色与移动 | ✅ 完成 | Unit 场景、点击寻路、沿路径移动 |
 | 寻路系统 | ✅ 完成 | AStarGrid2D、避障、GridData 格子档案 |
 | 回合状态机 | ⬜ 未开始 | |
-| 技能系统 | 🟡 骨架完成 | BaseAction + ActionsManager + Callable回调 |
+| 技能系统 | 🟡 进行中 | 移动技能(MoveAction) + 攻击模板 + Unit重构 |
 | 地形系统 | ⬜ 未开始 | |
 | 敌人 AI | ⬜ 未开始 | |
 
@@ -376,10 +376,77 @@ func get_action(action_id:String) -> BaseAction:
 - **排队执行**：一个 action 结束后通过回调通知，才能开始下一个
 - **无限扩展**：新增技能 = 新增继承 BaseAction 的脚本 + 挂到 ActionsManager 下 + 设置 action_id
 
-**未来扩展方向（待实现）：**
-- MoveAction 继承 BaseAction，把 Unit 的移动逻辑搬进去
-- AttackAction 继承 BaseAction，实现攻击逻辑
-- ActionsManager 增加 action 队列，支持"移动→攻击→结束回合"的自动排队
+**第五集：MoveAction + 其他技能模板**
+
+**新增/修改文件：**
+- `Scene/actions/move_action.gd` — 移动技能，继承 BaseAction
+- `Scene/actions/bow_action.gd` — 弓箭技能模板（占位）
+- `Scene/actions/sword_action.gd` — 剑击技能模板（占位）
+- `Scene/actions/fireball_action.gd` — 火球技能模板（占位）
+- `Scene/units/unit.gd` — 重构：移动逻辑移出，交给 MoveAction 处理
+- `Scene/units/unit.tscn` — ActionsManager 下挂载了 4 个 Action 子节点
+
+**MoveAction（第一个具体厨师）：**
+```gdscript
+extends BaseAction
+class_name MoveAction
+
+var path:Array[Vector2]
+var move_speed:float = 100
+
+func start_action(target_grid_position, on_action_finished):
+    super.start_action(target_grid_position, on_action_finished)  # 先执行父类标准流程（is_active=true+存回调）
+    path = GridManager.get_nav_world_path(unit.grid_position, target_grid_position)  # 再算自己的路径
+
+func _process(delta):
+    if not is_active:          # 保险栓：没激活时不执行
+        return
+    if path and not path.is_empty():
+        unit.global_position = unit.global_position.move_toward(path[0], move_speed * delta)
+        if unit.global_position == path[0]:
+            path.remove_at(0)
+    else:
+        finish_action()        # 路径走完了，通知外面"干完了"
+```
+
+**关键变化：**
+| 以前（Unit 自己管） | 现在（MoveAction 管） |
+|---------------------|----------------------|
+| `var path` / `move_speed` | 搬进了 MoveAction |
+| `_unhandled_input` 里算路径 | `start_action` 里算路径 |
+| `_process` 里走路 | `_process` 里走路 |
+| `global_position` | `unit.global_position`（通过 unit 引用操作角色） |
+
+**Unit 重构后：**
+```gdscript
+@onready var actions_manager: ActionsManager = $ActionsManager
+var is_performing_action:bool = false          # 状态锁：防止狂点鼠标导致技能叠发
+
+func on_action_finished():                     # 技能结束时的回调
+    is_performing_action = false               # 解锁，可以接受下一个指令
+
+func _unhandled_input(event):
+    if is_performing_action:                   # 正在执行？忽略新输入
+        return
+    if event.is_action_pressed("left_mouse_click"):
+        var mouse_grid = GridManager.get_mouse_grid_position()
+        is_performing_action = true            # 上锁
+        actions_manager.get_action("move_action").start_action(mouse_grid, on_action_finished)
+```
+
+**Callable 名片机制（跨对象回调的本质）：**
+- `on_action_finished` 不加括号 → 创建 `Callable` 对象，记录**对象地址（Unit）+ 函数名**
+- MoveAction 调用 `.call()` 时，Godot 根据名片上的地址找到 Unit，在其身上执行函数
+- 不是"跨脚本传播"，是"函数引用自带回家地址"
+
+**其他技能模板：**
+BowAction / SwordAction / FireballAction 目前只 `print` 然后 `finish_action()`，证明扩展性：新增技能 = 新建脚本 + 挂到 ActionsManager 下 + 设置 action_id，Unit 和 ActionsManager **完全不用改**。
+
+**设计验证：**
+- ✅ 解耦：Unit 只管"喊开工"，MoveAction 管"怎么走路"
+- ✅ 状态锁：`is_performing_action` 防止连点导致多个 action 并行
+- ✅ 扩展性：新增技能不改动现有代码
+- ⚠️ 待完善：ActionsManager 尚未实现真正的 action 队列（目前是 Unit 直接调用单个 action）
 
 ---
 

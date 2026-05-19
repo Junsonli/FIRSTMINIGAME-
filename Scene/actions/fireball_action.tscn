@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cf46v3u2l4pd5"]
+
+[ext_resource type="Script" uid="uid://ceqvs63hhwra1" path="res://Scene/actions/fireball_action.gd" id="1_mqrxq"]
+
+[node name="FireballAction" type="Node" unique_id=951063425]
+script = ExtResource("1_mqrxq")
+metadata/_custom_type_script = "uid://ln7vx4x445c3"
