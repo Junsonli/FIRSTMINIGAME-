@@ -25,7 +25,7 @@
 | 角色与移动 | ✅ 完成 | Unit 场景、点击寻路、沿路径移动 |
 | 寻路系统 | ✅ 完成 | AStarGrid2D、避障、GridData 格子档案 |
 | 回合状态机 | ⬜ 未开始 | |
-| 技能系统 | ⬜ 未开始 | |
+| 技能系统 | 🟡 骨架完成 | BaseAction + ActionsManager + Callable回调 |
 | 地形系统 | ⬜ 未开始 | |
 | 敌人 AI | ⬜ 未开始 | |
 
@@ -316,13 +316,70 @@ set_grid_occupied(grid, u) # 设置/清空占据单位
 
 ### □ 技能系统
 
-**待记录：**
-- 如何设计"易扩展"的技能：数据驱动（Resource）还是代码驱动？
-- 技能的数据结构（伤害、范围、消耗、目标类型）
-- 技能释放流程：选择 → 确认目标 → 执行 → 结算
+**第四集：初步搭建（骨架阶段）**
 
-**教程实践记录：**
-> （此处待填写）
+**新增文件：**
+- `Scene/actions/BaseAction.gd` — 技能基类（`class_name BaseAction`）
+- `Scene/managers/actions_manager.gd` — 技能管理器（`class_name ActionsManager`）
+
+**核心设计：把移动/攻击抽象为 Action，统一接口管理**
+
+**BaseAction 基类：**
+```gdscript
+class_name BaseAction
+
+@export var action_id:String        # 技能身份证，如 "move"
+@export var action_name:String      # 显示名，如 "移动"
+var unit:Unit                       # 所属角色（_ready 时从 owner 获取）
+var is_active:bool = false          # 是否正在执行
+var on_action_finished:Callable     # 回调函数：技能结束时通知外部
+
+func start_action(target_grid_position:Vector2i, on_action_finished:Callable):
+    is_active = true
+    self.on_action_finished = on_action_finished   # 存下回调，结束时报信
+
+func finish_action():
+    is_active = false
+    on_action_finished.call()                      # 拨通电话，通知"干完了"
+```
+
+**ActionsManager 管理器：**
+```gdscript
+class_name ActionsManager
+
+var actions:Array[BaseAction]
+
+func _ready():
+    # 遍历自己的子节点（MoveAction/AttackAction等），收集到数组
+    for action:BaseAction in get_children():
+        actions.append(action)
+
+func get_action(action_id:String) -> BaseAction:
+    # filter + lambda 匿名函数：按 action_id 筛选
+    var results = actions.filter(func(a): return a.action_id == action_id)
+    if not results.is_empty():
+        return results[0]
+    return null
+```
+
+**关键概念：**
+
+| 概念 | 说明 |
+|------|------|
+| `Callable` | 把函数当变量存起来，需要时 `.call()` 执行。类比：把电话号码存进通讯录，以后拨打 |
+| `self.xxx = xxx` | 参数名和成员变量同名时，加 `self.` 表示"存到成员变量" |
+| `filter(func):` | 数组筛选，传入匿名函数作为筛选条件 |
+| `get_children()` | 获取当前节点的所有直接子节点 |
+
+**设计意图：**
+- **解耦**：Unit 只管"收到输入"，ActionsManager 管"交给谁"，BaseAction 子类管"具体怎么做"
+- **排队执行**：一个 action 结束后通过回调通知，才能开始下一个
+- **无限扩展**：新增技能 = 新增继承 BaseAction 的脚本 + 挂到 ActionsManager 下 + 设置 action_id
+
+**未来扩展方向（待实现）：**
+- MoveAction 继承 BaseAction，把 Unit 的移动逻辑搬进去
+- AttackAction 继承 BaseAction，实现攻击逻辑
+- ActionsManager 增加 action 队列，支持"移动→攻击→结束回合"的自动排队
 
 ---
 
