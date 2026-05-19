@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dkjqtoq6d0mly"]
+
+[ext_resource type="Texture2D" uid="uid://cjcf36gkmjd74" path="res://assets/grids/HighlightGrid.png" id="1_kay1d"]
+[ext_resource type="Script" uid="uid://b6t2ma76focqj" path="res://Scene/UI/grid_indicator.gd" id="1_w2vb3"]
+
+[node name="GridIndicator" type="Node2D" unique_id=1394156497]
+script = ExtResource("1_w2vb3")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1471125943]
+texture = ExtResource("1_kay1d")
