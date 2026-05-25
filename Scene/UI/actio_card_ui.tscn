@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://csspn70hcrgf0"]
+
+[ext_resource type="Script" uid="uid://b3i2ingaejnsn" path="res://Scene/UI/actio_card_ui.gd" id="1_3cwbt"]
+
+[node name="ActioCardUI" type="Button" unique_id=1420319255]
+custom_minimum_size = Vector2(24, 24)
+text = "Action"
+script = ExtResource("1_3cwbt")

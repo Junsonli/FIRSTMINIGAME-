@@ -4,4 +4,7 @@
 
 [node name="FireballAction" type="Node" unique_id=951063425]
 script = ExtResource("1_mqrxq")
+action_id = "fireball_action"
+action_name = "Fireball"
+grid_color = Color(0.9999947, 0.29876342, 0.19421759, 1)
 metadata/_custom_type_script = "uid://ln7vx4x445c3"

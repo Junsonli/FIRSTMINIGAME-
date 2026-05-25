@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://8iahqkhx2d8w"]
+
+[ext_resource type="Script" uid="uid://guhsrje5ygy2" path="res://Scene/autoLoads/player_action_manager.gd" id="1_pawn6"]
+
+[node name="PlayerActionManager" type="Node" unique_id=1860858708]
+script = ExtResource("1_pawn6")

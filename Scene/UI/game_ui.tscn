@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://uor0s4lib0kh"]
+
+[ext_resource type="Script" uid="uid://c430mx1ccicd5" path="res://Scene/UI/unity_actions_ui.gd" id="1_bncvx"]
+[ext_resource type="PackedScene" uid="uid://csspn70hcrgf0" path="res://Scene/UI/actio_card_ui.tscn" id="2_tvpdx"]
+
+[node name="GameUI" type="CanvasLayer" unique_id=638434954]
+
+[node name="UnitActionsUI" type="MarginContainer" parent="." unique_id=1557276900]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_bottom = 7
+script = ExtResource("1_bncvx")
+action_card_ui_scene = ExtResource("2_tvpdx")
+
+[node name="MarginContainer" type="MarginContainer" parent="UnitActionsUI" unique_id=686223604]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="ActionContainer" type="HBoxContainer" parent="UnitActionsUI/MarginContainer" unique_id=848704661]
+layout_mode = 2
+theme_override_constants/separation = 8

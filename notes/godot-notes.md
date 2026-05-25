@@ -25,7 +25,7 @@
 | 角色与移动 | ✅ 完成 | Unit 场景、点击寻路、沿路径移动 |
 | 寻路系统 | ✅ 完成 | AStarGrid2D、避障、GridData 格子档案 |
 | 回合状态机 | ⬜ 未开始 | |
-| 技能系统 | 🟡 进行中 | 移动技能(MoveAction) + 攻击模板 + Unit重构 |
+| 技能系统 | ✅ 完成 | 移动/攻击模板 + Action回调 + 技能UI面板 |
 | 地形系统 | ⬜ 未开始 | |
 | 敌人 AI | ⬜ 未开始 | |
 
@@ -446,7 +446,132 @@ BowAction / SwordAction / FireballAction 目前只 `print` 然后 `finish_action
 - ✅ 解耦：Unit 只管"喊开工"，MoveAction 管"怎么走路"
 - ✅ 状态锁：`is_performing_action` 防止连点导致多个 action 并行
 - ✅ 扩展性：新增技能不改动现有代码
-- ⚠️ 待完善：ActionsManager 尚未实现真正的 action 队列（目前是 Unit 直接调用单个 action）
+**第六集：技能UI面板**
+
+**新增文件：**
+- `Scene/UI/game_ui.tscn` — CanvasLayer 总UI层
+- `Scene/UI/unity_actions_ui.gd` — UnitActionUI 技能面板
+- `Scene/UI/actio_card_ui.gd` — ActionCardUI 单个技能按钮
+
+**核心流程：**
+```gdscript
+# UnitActionUI._ready() 中延迟生成按钮
+call_deferred("update_unit_actions_ui")
+
+func update_unit_actions_ui():
+    # 1. 清空旧按钮
+    for node in action_container.get_children():
+        node.queue_free()
+    
+    # 2. 遍历 ActionsManager 的所有技能
+    for action in actions_manager.actions:
+        var btn = action_card_ui_scene.instantiate()  # 从 PackedScene 图纸造实例
+        action_container.add_child(btn)               # 塞进 HBoxContainer 横向排列
+        btn.set_up(action)                            # 设置按钮文字 = action.action_name
+```
+
+**关键概念：**
+
+| 概念 | 说明 |
+|------|------|
+| `PackedScene` | 预制件/图纸，存着节点模板 |
+| `instantiate()` | 用图纸造出真的实例 |
+| `add_child()` | 把节点挂到父节点下 |
+| `queue_free()` | 排队销毁（安全版删除） |
+| `call_deferred()` | 延迟到下一帧执行，避免初始化顺序问题 |
+| `CanvasLayer` | UI 专用层，渲染在最上层，不受相机影响 |
+| `HBoxContainer` | 横向自动排列子节点 |
+| `@export PackedScene` | 在编辑器 Inspector 里拖入预制件 |
+
+**场景结构：**
+```
+LevelScene
+├── GameUI (CanvasLayer)
+│   └── UnitActionsUI (MarginContainer)
+│       └── MarginContainer
+│           └── ActionContainer (HBoxContainer)
+│               ├── [Button: Move]
+│               ├── [Button: Bow]
+│               ├── [Button: Sword]
+│               └── [Button: Fireball]
+```
+
+**第七集：技能选择（大重构）**
+
+**新增/修改文件：**
+- `Scene/autoLoads/player_action_manager.gd` — **新增 AutoLoad 单例**：全局管理技能选择、输入处理、状态锁
+- `Scene/units/unit.gd` — **大幅瘦身**：删除输入逻辑、状态锁、移动相关，只剩 `actions_manager` 和 `grid_position`
+- `Scene/UI/actio_card_ui.gd` — **新增点击**：`pressed.connect(on_action_seleted)`，点击按钮通知 PlayerActionManager 切换技能
+- `Scene/level_scene.gd` — **新增**：启动时默认选中移动技能
+- `project.godot` — 新增 AutoLoad `PlayerActionManager`
+
+**PlayerActionManager（全局前台）：**
+```gdscript
+extends Node
+
+var is_performing_action:bool = false   # 全局状态锁（只有一份）
+var selected_action:BaseAction          # 当前选中的技能
+
+func _unhandled_input(event):
+    if is_performing_action: return
+    if event.is_action_pressed("left_mouse_click"):
+        try_perform_selected_action()
+
+func set_selected_action(action:BaseAction):
+    if is_performing_action: return
+    if selected_action == action: return
+    selected_action = action           # 切换当前技能
+
+func try_perform_selected_action():
+    if is_performing_action: return
+    if selected_action == null: return
+    var target = GridManager.get_mouse_grid_position()
+    is_performing_action = true        # 上锁
+    selected_action.start_action(target, on_action_finished)
+
+func on_action_finished():
+    is_performing_action = false       # 解锁
+```
+
+**三个函数的"人设"：**
+| 函数 | 作用 | 调用时机 |
+|------|------|---------|
+| `set_selected_action` | 切换当前技能 | 点 UI 按钮时 |
+| `try_perform_selected_action` | 执行当前技能 | 点鼠标左键时 |
+| `on_action_finished` | 解锁，允许下一个指令 | 技能回调 |
+
+**Unit 瘦身后的职责：**
+```gdscript
+extends Node2D
+class_name Unit
+
+@onready var actions_manager: ActionsManager = $ActionsManager
+
+var grid_position:Vector2i:
+    get:return GridManager.get_grid_position(global_position)
+```
+只剩两件事：知道自己有哪些技能、知道自己在哪格。
+
+**ActionCardUI 点击选择：**
+```gdscript
+func _ready():
+    pressed.connect(on_action_seleted)   # 按钮按下时触发
+
+func on_action_seleted():
+    PlayerActionManager.set_selected_action(action)  # 通知全局前台换技能
+```
+
+**为什么用 AutoLoad？**
+- PlayerActionManager 是全局单例，任何脚本都能直接访问
+- 不需要 `get_node` 层层找，直接写名字
+- 多个角色时，输入由全局统一管理，不会冲突
+
+**设计验证：**
+- ✅ 解耦：Unit 不管输入，只管"我是谁我在哪"
+- ✅ 全局状态锁：`is_performing_action` 只有一份，防止连点
+- ✅ 动态技能切换：点了按钮换技能，点鼠标执行当前技能
+- ✅ 初始化默认：`LevelScene._ready` 默认选中移动
+- ✅ 信号连接：`pressed.connect(...)` 按钮点击 → 切换技能
 
 ---
 

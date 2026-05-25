@@ -1,6 +1,7 @@
 extends Node
 
 var nav_layer:Nav_layer
+var visual_layer:TileMapLayer
 
 func get_grid_position(world_position:Vector2) -> Vector2i:
 	return nav_layer.local_to_map(nav_layer.to_local(world_position)) ##世界坐标→局部坐标→网格坐标
@@ -58,3 +59,19 @@ func set_grid_occupied(grid_position:Vector2i,unit:Unit) -> void:            #�
 	if not is_valid_grid(grid_position):
 		return 
 	nav_layer.grid_data_dict[grid_position].occupied_unit = unit
+
+func get_grid_path_length(grid_path:Array[Vector2i]) -> float:
+	if grid_path.size() <= 1:
+		return 0
+	var length:float = 0
+	for i in range(1, grid_path.size()):
+		if grid_path[i - 1].x != grid_path[i].x and grid_path[i - 1].y != grid_path[i].y:
+			length += 1.4
+		else:
+			length += 1
+	return length
+
+func visualize_grids(grids:Array[Vector2i],color:Color = Color.WHITE) -> void:
+	visual_layer.clear()
+	visual_layer.modulate = color
+	visual_layer.set_cells_terrain_connect(grids,0,0)  #获得地形

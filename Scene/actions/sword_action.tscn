@@ -4,4 +4,7 @@
 
 [node name="SwordAction" type="Node" unique_id=1495476752]
 script = ExtResource("1_7mtru")
+action_id = "sword_action"
+action_name = "Sword"
+grid_color = Color(0.727152, 0.98366123, 0.6795099, 1)
 metadata/_custom_type_script = "uid://ln7vx4x445c3"

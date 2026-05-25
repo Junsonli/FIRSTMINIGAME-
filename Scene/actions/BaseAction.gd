@@ -4,6 +4,7 @@ class_name BaseAction
 
 @export var action_id:String
 @export var action_name:String 
+@export var grid_color:Color = Color.WHITE
 
 var unit:Unit
 var is_active:bool = false
@@ -27,7 +28,22 @@ func finish_action() -> void:
 	#拨通之前存好的电话，通知外面的人"这个action干完了"
 	on_action_finished.call()
 
+func get_action_grids(unit_grid:Vector2i = unit.grid_position) -> Array[Vector2i]:  #仅模板，各技能自己写
+	return[]
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func is_obstacle(grid_position:Vector2i) -> bool:
+	if GridManager.is_grid_occupied(grid_position):
+		return false
+	return not GridManager.is_grid_walkable(grid_position)
+
+func is_occupied_by_allay(grid_position:Vector2i) -> bool:
+	if not GridManager.is_grid_occupied(grid_position):
+		return false
+	return GridManager.get_grid_occupied(grid_position).is_enemy == unit.is_enemy
+
+func hit_obstacle(starting_grid:Vector2i,ending_grid:Vector2i) -> bool:             #射线检查是否有障碍物
+	var starting_position:Vector2 = GridManager.get_world_position(starting_grid)
+	var ending_position:Vector2 = GridManager.get_world_position(ending_grid)
+	var query_parameters = PhysicsRayQueryParameters2D.create(starting_position,ending_position,2)
+	var result = get_tree().root.world_2d.direct_space_state.intersect_ray(query_parameters)
+	return not result.is_empty()

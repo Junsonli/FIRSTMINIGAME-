@@ -4,4 +4,7 @@
 
 [node name="BowAction" type="Node" unique_id=762374798]
 script = ExtResource("1_etljp")
+action_id = "bow_action"
+action_name = "Bow"
+grid_color = Color(0.5882067, 0.9795695, 0.9627171, 1)
 metadata/_custom_type_script = "uid://ln7vx4x445c3"

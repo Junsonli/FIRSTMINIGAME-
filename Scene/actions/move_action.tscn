@@ -4,4 +4,6 @@
 
 [node name="MoveAction" type="Node" unique_id=219497780]
 script = ExtResource("1_dhv2n")
+action_id = "move_action"
+action_name = "Move"
 metadata/_custom_type_script = "uid://ln7vx4x445c3"

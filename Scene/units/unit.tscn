@@ -23,7 +23,13 @@ action_id = "move_action"
 action_name = "Move"
 
 [node name="BowAction" parent="ActionsManager" unique_id=762374798 instance=ExtResource("5_jd8t8")]
+action_id = "bow_action"
+action_name = "Bow"
 
 [node name="SwordAction" parent="ActionsManager" unique_id=1495476752 instance=ExtResource("6_m2n7x")]
+action_id = "sword_action"
+action_name = "Sword"
 
 [node name="FireballAction" parent="ActionsManager" unique_id=951063425 instance=ExtResource("7_notsm")]
+action_id = "fireball_action"
+action_name = "Fireball"
