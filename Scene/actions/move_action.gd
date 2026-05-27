@@ -9,6 +9,11 @@ var move_speed:float = 100
 func start_action(target_grid_position:Vector2i,on_action_finished:Callable) -> void:
 	super.start_action(target_grid_position,on_action_finished)
 	path = GridManager.get_nav_world_path(unit.grid_position,target_grid_position)
+	
+	GridManager.set_grid_walkable(unit.grid_position,true)
+	GridManager.set_grid_occupied(unit.grid_position,null)
+	GridManager.set_grid_walkable(target_grid_position,false)
+	GridManager.set_grid_occupied(target_grid_position,unit)
 
 func move(target_global_position:Vector2,delta: float) -> void:
 	#朝目标平滑移动，move_speed * delta = 这一帧走多少像素（保证和帧率无关） 

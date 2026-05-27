@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 GridManager="*uid://smuxvppgtgys"
 PlayerActionManager="*uid://8iahqkhx2d8w"
+GameManager="*uid://cqkq20gbcvofn"
+TurnManager="*uid://0w7pnkfutsjm"
 
 [display]
 

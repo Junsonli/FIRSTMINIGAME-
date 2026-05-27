@@ -7,6 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://dk3sdx6fl8o0r" path="res://Scene/actions/bow_action.tscn" id="5_jd8t8"]
 [ext_resource type="PackedScene" uid="uid://pftncw88qmhl" path="res://Scene/actions/sword_action.tscn" id="6_m2n7x"]
 [ext_resource type="PackedScene" uid="uid://cf46v3u2l4pd5" path="res://Scene/actions/fireball_action.tscn" id="7_notsm"]
+[ext_resource type="Script" uid="uid://ccw3fhdl5pwq1" path="res://Scene/units/unit_area.gd" id="8_m2n7x"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_notsm"]
+size = Vector2(16, 16)
 
 [node name="Unit" type="Node2D" unique_id=1734782482]
 position = Vector2(8, 8)
@@ -19,17 +23,15 @@ texture = ExtResource("2_yp0wv")
 [node name="ActionsManager" parent="." unique_id=1992410721 instance=ExtResource("3_yp0wv")]
 
 [node name="MoveAction" parent="ActionsManager" unique_id=219497780 instance=ExtResource("4_7c180")]
-action_id = "move_action"
-action_name = "Move"
 
 [node name="BowAction" parent="ActionsManager" unique_id=762374798 instance=ExtResource("5_jd8t8")]
-action_id = "bow_action"
-action_name = "Bow"
 
 [node name="SwordAction" parent="ActionsManager" unique_id=1495476752 instance=ExtResource("6_m2n7x")]
-action_id = "sword_action"
-action_name = "Sword"
 
 [node name="FireballAction" parent="ActionsManager" unique_id=951063425 instance=ExtResource("7_notsm")]
-action_id = "fireball_action"
-action_name = "Fireball"
+
+[node name="UnitArea" type="Area2D" parent="." unique_id=1128676180]
+script = ExtResource("8_m2n7x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UnitArea" unique_id=759604925]
+shape = SubResource("RectangleShape2D_notsm")

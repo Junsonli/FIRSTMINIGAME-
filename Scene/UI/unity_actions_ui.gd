@@ -6,11 +6,19 @@ class_name UnitActionUI
 
 @onready var action_container: HBoxContainer = $MarginContainer/ActionContainer
 
+var selected_unit:Unit
+
 func _ready() -> void:
-	call_deferred("update_unit_actions_ui")
+	PlayerActionManager.unit_selected.connect(on_unit_selected)
+
+func on_unit_selected(unit:Unit) -> void:
+	if selected_unit == unit:
+		return
+	selected_unit = unit
+	update_unit_actions_ui()
 
 func update_unit_actions_ui() -> void:
-	var actions_manager:ActionsManager = get_tree().current_scene.get_node("Unit").get_node("ActionsManager")
+	var actions_manager:ActionsManager = selected_unit.actions_manager
 	
 	for node in action_container.get_children():
 		node.queue_free()
@@ -19,11 +27,3 @@ func update_unit_actions_ui() -> void:
 		var action_card_ui:ActionCardUI = action_card_ui_scene.instantiate()
 		action_container.add_child(action_card_ui)
 		action_card_ui.set_up(action)
-
-# Called when the node enters the scene tree for the first time.
-
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

@@ -20,7 +20,11 @@ func get_nav_grid_path(start_gird_position:Vector2i,end_gird_position:Vector2i) 
 	if not is_valid_grid(start_gird_position) or not is_valid_grid(end_gird_position):
 		return []
 	#两个点都合法时，调用A*计算最短路径（自动绕开solid墙）
-	return nav_layer.a_star.get_id_path(start_gird_position,end_gird_position)
+	var start_grid_solid: bool = nav_layer.a_star.is_point_solid(start_gird_position)
+	nav_layer.a_star.set_point_solid(start_gird_position, false)          # ← 临时打开起点
+	var path: Array[Vector2i] = nav_layer.a_star.get_id_path(start_gird_position, end_gird_position)
+	nav_layer.a_star.set_point_solid(start_gird_position, start_grid_solid)  # ← 恢复
+	return path
 	
 func get_nav_world_path(start_gird_position:Vector2i,end_gird_position:Vector2i) -> Array[Vector2]:
 	var grid_path = get_nav_grid_path(start_gird_position,end_gird_position)

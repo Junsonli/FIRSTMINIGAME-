@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dwo5nmf6q67fl"]
+
+[ext_resource type="Script" uid="uid://5li74auf70kc" path="res://Scene/units/unit.gd" id="1_k6jib"]
+[ext_resource type="Texture2D" uid="uid://dmied1wg4ixvs" path="res://icon.svg" id="2_8wfum"]
+[ext_resource type="PackedScene" uid="uid://cgmftem1xn27v" path="res://Scene/managers/actions_manager.tscn" id="3_qiboe"]
+[ext_resource type="PackedScene" uid="uid://cpnjhu7lhvr8b" path="res://Scene/actions/move_action.tscn" id="4_o014n"]
+[ext_resource type="PackedScene" uid="uid://dk3sdx6fl8o0r" path="res://Scene/actions/bow_action.tscn" id="5_k6jib"]
+[ext_resource type="PackedScene" uid="uid://cf46v3u2l4pd5" path="res://Scene/actions/fireball_action.tscn" id="7_8wfum"]
+[ext_resource type="Script" uid="uid://ccw3fhdl5pwq1" path="res://Scene/units/unit_area.gd" id="8_hyffi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_notsm"]
+size = Vector2(16, 16)
+
+[node name="Unit2" type="Node2D" unique_id=1734782482]
+position = Vector2(8, 8)
+script = ExtResource("1_k6jib")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1626129193]
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("2_8wfum")
+
+[node name="ActionsManager" parent="." unique_id=1992410721 instance=ExtResource("3_qiboe")]
+
+[node name="MoveAction" parent="ActionsManager" unique_id=219497780 instance=ExtResource("4_o014n")]
+
+[node name="BowAction" parent="ActionsManager" unique_id=762374798 instance=ExtResource("5_k6jib")]
+
+[node name="FireballAction" parent="ActionsManager" unique_id=951063425 instance=ExtResource("7_8wfum")]
+
+[node name="UnitArea" type="Area2D" parent="." unique_id=1128676180]
+script = ExtResource("8_hyffi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UnitArea" unique_id=759604925]
+shape = SubResource("RectangleShape2D_notsm")

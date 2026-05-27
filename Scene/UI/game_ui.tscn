@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c430mx1ccicd5" path="res://Scene/UI/unity_actions_ui.gd" id="1_bncvx"]
 [ext_resource type="PackedScene" uid="uid://csspn70hcrgf0" path="res://Scene/UI/actio_card_ui.tscn" id="2_tvpdx"]
+[ext_resource type="Script" uid="uid://dkyfmxovy7ouv" path="res://Scene/UI/turn_ui.gd" id="3_ltyo1"]
 
 [node name="GameUI" type="CanvasLayer" unique_id=638434954]
 
@@ -22,4 +23,32 @@ size_flags_vertical = 8
 
 [node name="ActionContainer" type="HBoxContainer" parent="UnitActionsUI/MarginContainer" unique_id=848704661]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 4
+
+[node name="TurnUI" type="MarginContainer" parent="." unique_id=1489518834]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+script = ExtResource("3_ltyo1")
+
+[node name="EndTurnButton" type="Button" parent="TurnUI" unique_id=598156815]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "结束回合
+"
+
+[node name="TurnLabel" type="Label" parent="TurnUI" unique_id=1219464895]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "玩家回合"
+horizontal_alignment = 1
+vertical_alignment = 1

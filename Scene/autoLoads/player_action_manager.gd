@@ -1,13 +1,21 @@
 extends Node
 
+signal unit_selected(unit:Unit)
+
 var is_performing_action:bool = false
 var selected_action:BaseAction 
+var selected_unit:Unit
 
-func _unhandled_input(event: InputEvent) -> void: 			#用_unhandled_input是防止和UI的输入冲突，UI处理完剩余的输入才到这里
+
+func set_selected_unit(unit:Unit) -> void:
 	if is_performing_action:
 		return
-	if event.is_action_pressed("left_mouse_click"):
-		try_perform_selected_action()
+	if selected_action == unit:
+		return
+		
+	selected_unit = unit
+	print(unit.name + "selected")
+	set_selected_action(unit.actions_manager.get_action("move_aciton"))
 
 func set_selected_action(action:BaseAction) -> void:
 	if is_performing_action:
