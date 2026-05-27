@@ -18,4 +18,4 @@ func _ready() -> void:
 		var unit:Unit =  GameManager.player_units[0]
 		PlayerActionManager.set_selected_unit(unit)
 	
-	state_machine.launch_state_machine
+	state_machine.launch_state_machine()

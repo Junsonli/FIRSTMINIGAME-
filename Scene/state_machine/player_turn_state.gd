@@ -9,7 +9,7 @@ func on_state_enter() -> void:
 
 func on_state_frame_update(delta:float) -> void:
 	if go_to_enemy_turn:
-		state_changed.emit("EnemyTurnStart")
+		state_changed.emit("EnemyTurnState")
 
 func on_state_exit() -> void:
 	TurnManager.enemy_turn_started.disconnect(on_enemy_turn_started)

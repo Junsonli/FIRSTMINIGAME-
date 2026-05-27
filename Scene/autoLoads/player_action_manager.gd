@@ -14,8 +14,9 @@ func set_selected_unit(unit:Unit) -> void:
 		return
 		
 	selected_unit = unit
-	print(unit.name + "selected")
-	set_selected_action(unit.actions_manager.get_action("move_aciton"))
+	print(unit.name + " selected")
+	unit_selected.emit(selected_unit)
+	set_selected_action(unit.actions_manager.get_action("move_action"))
 
 func set_selected_action(action:BaseAction) -> void:
 	if is_performing_action:
