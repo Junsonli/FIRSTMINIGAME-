@@ -7,10 +7,14 @@
 [ext_resource type="PackedScene" uid="uid://dkjqtoq6d0mly" path="res://Scene/UI/grid_indicator.tscn" id="3_6vp15"]
 [ext_resource type="PackedScene" uid="uid://dxca8qnerwp7" path="res://Scene/state_machine/state_machine.tscn" id="3_jdmsd"]
 [ext_resource type="Script" uid="uid://b8vvtu3k7hlif" path="res://Scene/state_machine/player_turn_state.gd" id="4_164si"]
-[ext_resource type="PackedScene" uid="uid://b5ode02em8k7j" path="res://Scene/units/unit.tscn" id="4_x2bx5"]
 [ext_resource type="TileSet" uid="uid://b00nnrxhe6seg" path="res://resources/visualize_tile_set.tres" id="5_msef8"]
 [ext_resource type="Script" uid="uid://dssro5jkm78kr" path="res://Scene/state_machine/enemy_turn_state.gd" id="5_x83c6"]
-[ext_resource type="PackedScene" uid="uid://dwo5nmf6q67fl" path="res://Scene/units/unit2.tscn" id="8_c8lhy"]
+[ext_resource type="PackedScene" uid="uid://dml42jdbvn2ld" path="res://Scene/units/player_units/archer_unit.tscn" id="10_164si"]
+[ext_resource type="PackedScene" uid="uid://kxgvl2rtj2bh" path="res://Scene/units/player_units/knight_unit.tscn" id="11_x83c6"]
+[ext_resource type="PackedScene" uid="uid://dv2kuna2mw2in" path="res://Scene/units/player_units/wizard_unit.tscn" id="12_7uauc"]
+[ext_resource type="PackedScene" uid="uid://b7bprav3d3au" path="res://Scene/units/enemy_units/enemy_wzard_unit.tscn" id="13_wxqn5"]
+[ext_resource type="PackedScene" uid="uid://bbdtrtahvxqph" path="res://Scene/units/enemy_units/enemy_archer_unit.tscn" id="14_8wbhp"]
+[ext_resource type="PackedScene" uid="uid://bkxf433ax5587" path="res://Scene/units/enemy_units/enemy_knight_unit.tscn" id="15_lgb56"]
 
 [node name="LevelScene" type="Node" unique_id=1498042475]
 script = ExtResource("1_xb3ij")
@@ -40,8 +44,20 @@ tile_set = ExtResource("5_msef8")
 
 [node name="GridIndicator" parent="." unique_id=1394156497 instance=ExtResource("3_6vp15")]
 
-[node name="Unit" parent="." unique_id=1734782482 instance=ExtResource("4_x2bx5")]
-position = Vector2(72, 56)
+[node name="ArcherUnit" parent="." unique_id=1734782482 instance=ExtResource("10_164si")]
+position = Vector2(145, 57)
 
-[node name="Unit2" parent="." unique_id=1410069674 instance=ExtResource("8_c8lhy")]
-position = Vector2(280, 136)
+[node name="KnightUnit" parent="." unique_id=1833276082 instance=ExtResource("11_x83c6")]
+position = Vector2(60, 110)
+
+[node name="WizardUnit" parent="." unique_id=1669413886 instance=ExtResource("12_7uauc")]
+position = Vector2(198, 56)
+
+[node name="EnemyWzardUnit" parent="." unique_id=1321869393 instance=ExtResource("13_wxqn5")]
+position = Vector2(447, 153)
+
+[node name="EnemyArcherUnit" parent="." unique_id=445745764 instance=ExtResource("14_8wbhp")]
+position = Vector2(472, 178)
+
+[node name="EnemyKnightUnit" parent="." unique_id=408437255 instance=ExtResource("15_lgb56")]
+position = Vector2(473, 153)

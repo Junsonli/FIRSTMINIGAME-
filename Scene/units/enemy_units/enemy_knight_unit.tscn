@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bkxf433ax5587"]
+
+[ext_resource type="PackedScene" uid="uid://b5ode02em8k7j" path="res://Scene/units/unit.tscn" id="1_oh1li"]
+[ext_resource type="SpriteFrames" uid="uid://5tlmxj3s8wle" path="res://resources/animations/enemy_animations/enemy_knight_animation.tres" id="2_2scni"]
+[ext_resource type="PackedScene" uid="uid://pftncw88qmhl" path="res://Scene/actions/sword_action.tscn" id="3_o0gpw"]
+
+[node name="EnemyKnightUnit" unique_id=1734782482 instance=ExtResource("1_oh1li")]
+is_enemy = true
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1712673716]
+sprite_frames = ExtResource("2_2scni")
+
+[node name="SwordAction" parent="ActionsManager" parent_id_path=PackedInt32Array(1992410721) index="1" unique_id=1495476752 instance=ExtResource("3_o0gpw")]

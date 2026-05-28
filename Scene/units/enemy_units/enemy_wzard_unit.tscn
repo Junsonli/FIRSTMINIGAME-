@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://b7bprav3d3au"]
+
+[ext_resource type="PackedScene" uid="uid://b5ode02em8k7j" path="res://Scene/units/unit.tscn" id="1_r2ryy"]
+[ext_resource type="SpriteFrames" uid="uid://cps5vanto7yu3" path="res://resources/animations/enemy_animations/enemy_wizard_animation.tres" id="2_nuouk"]
+[ext_resource type="PackedScene" uid="uid://cf46v3u2l4pd5" path="res://Scene/actions/fireball_action.tscn" id="3_ujh15"]
+
+[node name="EnemyWzardUnit" unique_id=1734782482 instance=ExtResource("1_r2ryy")]
+is_enemy = true
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1712673716]
+sprite_frames = ExtResource("2_nuouk")
+
+[node name="FireballAction" parent="ActionsManager" parent_id_path=PackedInt32Array(1992410721) index="1" unique_id=951063425 instance=ExtResource("3_ujh15")]

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://kxgvl2rtj2bh"]
+
+[ext_resource type="PackedScene" uid="uid://b5ode02em8k7j" path="res://Scene/units/unit.tscn" id="1_suho5"]
+[ext_resource type="PackedScene" uid="uid://pftncw88qmhl" path="res://Scene/actions/sword_action.tscn" id="3_7da5p"]
+
+[node name="KnightUnit" unique_id=1734782482 instance=ExtResource("1_suho5")]
+
+[node name="SwordAction" parent="ActionsManager" parent_id_path=PackedInt32Array(1992410721) index="1" unique_id=1495476752 instance=ExtResource("3_7da5p")]

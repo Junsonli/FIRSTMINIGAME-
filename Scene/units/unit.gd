@@ -4,6 +4,7 @@ class_name Unit
  
 @onready var actions_manager: ActionsManager = $ActionsManager
 @onready var unit_area: Area2D = $UnitArea
+@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
 @export var is_enemy:bool = false
 

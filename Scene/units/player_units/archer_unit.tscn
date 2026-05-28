@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dml42jdbvn2ld"]
+
+[ext_resource type="PackedScene" uid="uid://b5ode02em8k7j" path="res://Scene/units/unit.tscn" id="1_2gset"]
+[ext_resource type="PackedScene" uid="uid://dk3sdx6fl8o0r" path="res://Scene/actions/bow_action.tscn" id="2_86qp7"]
+[ext_resource type="SpriteFrames" uid="uid://ce1p1aw0utu1c" path="res://resources/animations/player_animations/archer_animation.tres" id="2_m30ek"]
+
+[node name="ArcherUnit" unique_id=1734782482 instance=ExtResource("1_2gset")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1712673716]
+sprite_frames = ExtResource("2_m30ek")
+
+[node name="BowAction" parent="ActionsManager" parent_id_path=PackedInt32Array(1992410721) index="1" unique_id=762374798 instance=ExtResource("2_86qp7")]

@@ -13,10 +13,15 @@ func start_action(target_grid_position:Vector2i,on_action_finished:Callable) -> 
 	GridManager.set_grid_walkable(unit.grid_position,true)
 	GridManager.set_grid_occupied(unit.grid_position,null)
 	GridManager.set_grid_walkable(target_grid_position,false)
-	GridManager.set_grid_occupied(target_grid_position,unit)
+	GridManager.set_grid_occupied(target_grid_position,unit) 
+	
+	unit.animated_sprite_2d.play("run")
 
-func move(target_global_position:Vector2,delta: float) -> void:
-	#朝目标平滑移动，move_speed * delta = 这一帧走多少像素（保证和帧率无关） 
+func move(target_global_position:Vector2,delta: float) -> void:   #朝目标平滑移动，move_speed * delta = 这一帧走多少像素（保证和帧率无关） 
+	if unit.global_position.x > target_global_position.x:
+			unit.animated_sprite_2d.scaleZ = Vector2(-1,1)
+	if unit.global_position.x < target_global_position.x:
+		unit.animated_sprite_2d.scale = Vector2(1,1)
 	unit.global_position = unit.global_position.move_toward(target_global_position,move_speed * delta)
 
 func _process(delta: float) -> void:
@@ -28,6 +33,7 @@ func _process(delta: float) -> void:
 			GridManager.visualize_grids(PlayerActionManager.selected_action.get_action_grids(),PlayerActionManager.selected_action.grid_color)   
 			path.remove_at(0)               #擦掉这个点，走下一个    
 	else:
+		unit.animated_sprite_2d.play("idle")
 		finish_action()
 
 func get_action_grids(unit_grid:Vector2i = unit.grid_position) -> Array[Vector2i]:

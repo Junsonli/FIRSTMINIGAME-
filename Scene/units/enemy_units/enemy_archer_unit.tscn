@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bbdtrtahvxqph"]
+
+[ext_resource type="PackedScene" uid="uid://b5ode02em8k7j" path="res://Scene/units/unit.tscn" id="1_egvnj"]
+[ext_resource type="SpriteFrames" uid="uid://dxcuk15fiu4ri" path="res://resources/animations/enemy_animations/enemy_archer_animation.tres" id="2_v3xd6"]
+[ext_resource type="PackedScene" uid="uid://dk3sdx6fl8o0r" path="res://Scene/actions/bow_action.tscn" id="3_s4hl8"]
+
+[node name="EnemyArcherUnit" unique_id=1734782482 instance=ExtResource("1_egvnj")]
+is_enemy = true
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1712673716]
+sprite_frames = ExtResource("2_v3xd6")
+
+[node name="BowAction" parent="ActionsManager" parent_id_path=PackedInt32Array(1992410721) index="1" unique_id=762374798 instance=ExtResource("3_s4hl8")]

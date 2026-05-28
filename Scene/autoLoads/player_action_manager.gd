@@ -10,7 +10,7 @@ var selected_unit:Unit
 func set_selected_unit(unit:Unit) -> void:
 	if is_performing_action:
 		return
-	if selected_action == unit:
+	if selected_action == unit or unit.is_enemy:
 		return
 		
 	selected_unit = unit
